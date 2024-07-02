@@ -3,8 +3,10 @@ package com.techyourchance.coroutines.demonstrations.structuredconcurrency.kotli
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.`is`
@@ -22,7 +24,7 @@ class FibonacciUseCaseAsyncUiCoroutinesTest {
     private lateinit var SUT: FibonacciUseCaseAsyncUiCoroutines
 
     var lastResult: BigInteger? = null
-    private val testCoroutineDispatcher = TestCoroutineDispatcher()
+    private val testCoroutineDispatcher = UnconfinedTestDispatcher()
 
     @Before
     fun setup() {
@@ -42,7 +44,8 @@ class FibonacciUseCaseAsyncUiCoroutinesTest {
 
     @Test
     fun computeFibonacci_0_returns0() {
-        testCoroutineDispatcher.runBlockingTest {
+        // Dispatcher is sent is an optional param
+        runTest(testCoroutineDispatcher) {
             // Arrange
             // Act
             SUT.computeFibonacci(0, callback)
@@ -53,7 +56,7 @@ class FibonacciUseCaseAsyncUiCoroutinesTest {
 
     @Test
     fun computeFibonacci_1_returns1() {
-        testCoroutineDispatcher.runBlockingTest {
+        runTest {
             // Arrange
             // Act
             SUT.computeFibonacci(1, callback)
@@ -64,7 +67,7 @@ class FibonacciUseCaseAsyncUiCoroutinesTest {
 
     @Test
     fun computeFibonacci_10_returnsCorrectAnswer() {
-        testCoroutineDispatcher.runBlockingTest {
+        runTest {
             // Arrange
             // Act
             SUT.computeFibonacci(10, callback)
@@ -75,7 +78,7 @@ class FibonacciUseCaseAsyncUiCoroutinesTest {
 
     @Test
     fun computeFibonacci_30_returnsCorrectAnswer() {
-        testCoroutineDispatcher.runBlockingTest {
+        runTest {
             // Arrange
             // Act
             SUT.computeFibonacci(30, callback)
@@ -83,4 +86,5 @@ class FibonacciUseCaseAsyncUiCoroutinesTest {
             assertThat(lastResult, `is`(BigInteger("832040")))
         }
     }
+
 }
