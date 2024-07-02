@@ -47,8 +47,8 @@ class FactorialUseCase {
             nextComputationRangeEnd = threadsComputationRanges[i].start - 1
         }
 
-        // add potentially "remaining" values to first thread's range
-        //threadsComputationRanges[0] = ComputationRange(1, threadsComputationRanges[0].end)
+        // Ranges are split between all available threads, but some ranges were left out
+        threadsComputationRanges[0] = ComputationRange(1, threadsComputationRanges[0].end)
 
         return threadsComputationRanges
     }
